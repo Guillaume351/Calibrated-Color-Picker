@@ -13,6 +13,11 @@ struct ContentView: View {
     
     @EnvironmentObject var mouse : MouseCoordinates
     
+    // Slider values
+    @State var sliderValue = 10.0
+    var minimumValue = 0.0
+    var maximumvalue = 100.0
+    
     var body: some View {
         
         
@@ -23,6 +28,7 @@ struct ContentView: View {
                 Rectangle()
                     .fill(Color(image.averageColor!))
                     .frame(width: 100, height: 100)
+                    .padding()
                
                 VStack {
                     Spacer()
@@ -34,11 +40,12 @@ struct ContentView: View {
                     Text("A: \(image.averageColor!.rgbColor()!.toLAB().a)")
                     Text("B: \(image.averageColor!.rgbColor()!.toLAB().b)")
                     Spacer()
-                    HStack { Spacer() }
+                    Slider(value: $sliderValue, in: minimumValue...maximumvalue)
                   //  Text("Coordonnées : \(mouse.coord.x), \(mouse.coord.y)")
                 }
                 
                 Image(nsImage: image)
+                    .padding()
                 
          
                 
@@ -72,7 +79,7 @@ struct ContentView: View {
             let deviceDescription = screen.deviceDescription
             let screenID = deviceDescription[NSDeviceDescriptionKey(rawValue: "NSScreenNumber")]
             
-            let size = 10.0
+            let size = sliderValue
             var origin = mouse.coord
             origin.y = screen.frame.height - origin.y
             print("Rectangle center : \(origin)")
