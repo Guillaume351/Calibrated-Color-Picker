@@ -14,6 +14,7 @@
 		C5D5A028255C18DA0089C9B3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C5D5A026255C18DA0089C9B3 /* Main.storyboard */; };
 		C5D5A034255C18DB0089C9B3 /* Calibrated_Color_PickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5D5A033255C18DB0089C9B3 /* Calibrated_Color_PickerTests.swift */; };
 		C5D5A03F255C18DB0089C9B3 /* Calibrated_Color_PickerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5D5A03E255C18DB0089C9B3 /* Calibrated_Color_PickerUITests.swift */; };
+		C5D5A050255C49470089C9B3 /* rgb_to_lab.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5D5A04F255C49470089C9B3 /* rgb_to_lab.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +49,7 @@
 		C5D5A03A255C18DB0089C9B3 /* Calibrated Color PickerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Calibrated Color PickerUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5D5A03E255C18DB0089C9B3 /* Calibrated_Color_PickerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calibrated_Color_PickerUITests.swift; sourceTree = "<group>"; };
 		C5D5A040255C18DB0089C9B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C5D5A04F255C49470089C9B3 /* rgb_to_lab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = rgb_to_lab.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +107,7 @@
 				C5D5A029255C18DA0089C9B3 /* Info.plist */,
 				C5D5A02A255C18DA0089C9B3 /* Calibrated_Color_Picker.entitlements */,
 				C5D5A023255C18DA0089C9B3 /* Preview Content */,
+				C5D5A04F255C49470089C9B3 /* rgb_to_lab.swift */,
 			);
 			path = "Calibrated Color Picker";
 			sourceTree = "<group>";
@@ -265,6 +268,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C5D5A050255C49470089C9B3 /* rgb_to_lab.swift in Sources */,
 				C5D5A020255C18D90089C9B3 /* ContentView.swift in Sources */,
 				C5D5A01E255C18D90089C9B3 /* AppDelegate.swift in Sources */,
 			);
