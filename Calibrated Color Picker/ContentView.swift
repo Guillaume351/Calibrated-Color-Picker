@@ -20,6 +20,9 @@ struct ContentView: View {
         return HStack{
             if let image = getImageAroundMouse(){
         
+                Rectangle()
+                    .fill(Color(image.averageColor!))
+                    .frame(width: 100, height: 100)
                
                 VStack {
                     Spacer()
@@ -71,10 +74,13 @@ struct ContentView: View {
             
             let size = 10.0
             var origin = mouse.coord
+            origin.y = screen.frame.height - origin.y
+            print("Rectangle center : \(origin)")
             origin.x -= CGFloat(size/2)
             origin.y -= CGFloat(size/2)
-            origin.y = screen.visibleFrame.height - origin.y
-            print(origin)
+      
+            print("Mouse : \(mouse.coord)")
+            print("Min max \(screen.frame.maxY)")
             
             if let image:CGImage = CGDisplayCreateImage(CGMainDisplayID(), rect: CGRect(origin: origin, size: CGSize(width: size, height: size)))
             {
