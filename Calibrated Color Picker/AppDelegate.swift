@@ -20,7 +20,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Create the SwiftUI view that provides the window contents.
-        let contentView = ContentView().environmentObject(mouse)
+        let calibration = Calibration()
+        let contentView = ContentView().environmentObject(mouse).environmentObject(calibration)
 
         // Create the window and set the content view.
         window = NSWindow(
@@ -41,6 +42,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             self.mouse.coord.y = self.mouseLocation.y
                  return $0
              }
+        
+        
+        // Clicks outside the window
+        NSEvent.addGlobalMonitorForEvents(matching: NSEvent.EventTypeMask.leftMouseDown) { (NSEvent) in
+            print("clic outside the window")
+            if (calibration.isCalibrating){
+                calibration.calibrationColor = calibration.lastAverageColor
+                calibration.isCalibrated = true
+                
+                calibration.isCalibrating = false
+            }
+         
+        }
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
@@ -52,5 +66,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 class MouseCoordinates: ObservableObject {
     @Published var coord = CGPoint(x:0,y:0)
+}
+
+class Calibration: ObservableObject {
+    // Color expected
+    @Published var baseColorForCalibration : NSColor = NSColor.black
+    
+    // Color you actually picked up
+    @Published var calibrationColor : NSColor = NSColor.black
+    
+    // Used as a buffer value
+    @Published var lastAverageColor : NSColor = NSColor.black
+    @Published var isCalibrated : Bool = false
+    @Published var isCalibrating : Bool = false
 }
 

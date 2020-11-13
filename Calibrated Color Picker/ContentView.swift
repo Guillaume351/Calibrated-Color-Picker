@@ -11,8 +11,13 @@ import AppKit
 
 struct ContentView: View {
     
+    // Used to transfer mouse coordinates and move events
     @EnvironmentObject var mouse : MouseCoordinates
     
+    // Used to store calibrated RGB value
+    @EnvironmentObject var calibration : Calibration
+    
+    //  var averageColor : NSColor = NSColor.black
     // Slider values
     @State var sliderValue = 10.0
     var minimumValue = 0.0
@@ -22,36 +27,77 @@ struct ContentView: View {
         
         
         // Spacers needed to make the VStack occupy the whole screen
-        return HStack{
-            if let image = getImageAroundMouse(){
-        
-                Rectangle()
-                    .fill(Color(image.averageColor!))
-                    .frame(width: 100, height: 100)
-                    .padding()
+        return VStack {
+            HStack{
+            if let (image, color) = getImageAroundMouse(){
+                if let color = color {
+                    Rectangle()
+                        .fill(Color(color))
+                        .frame(width: 100, height: 100)
+                        .padding()
+                    
+                    VStack {
+                        Spacer()
+                        
+                        Text("R: \(color.redComponent * 255)")
+                        Text("G: \(color.greenComponent * 255)")
+                        Text("B: \(color.blueComponent * 255)")
+                        Spacer()
+                        Text("L: \(color.rgbColor()!.toLAB().l)")
+                        Text("A: \(color.rgbColor()!.toLAB().a)")
+                        Text("B: \(color.rgbColor()!.toLAB().b)")
+                        Spacer()
+                        
+                        
+                        //  Text("Coordonnées : \(mouse.coord.x), \(mouse.coord.y)")
+                    }
+                    
+                }else{
+                    Rectangle()
+                        .frame(width: 100, height: 100)
+                        .padding()
+                    
+                    
+                    VStack {
+                        Spacer()
+                        
+                        Text("Déplacez la souris pour commencer")
                
-                VStack {
-                    Spacer()
-                    Text("R: \(image.averageColor!.redComponent * 255)")
-                    Text("G: \(image.averageColor!.greenComponent * 255)")
-                    Text("B: \(image.averageColor!.blueComponent * 255)")
-                    Spacer()
-                    Text("L: \(image.averageColor!.rgbColor()!.toLAB().l)")
-                    Text("A: \(image.averageColor!.rgbColor()!.toLAB().a)")
-                    Text("B: \(image.averageColor!.rgbColor()!.toLAB().b)")
-                    Spacer()
-                    Slider(value: $sliderValue, in: minimumValue...maximumvalue)
-                  //  Text("Coordonnées : \(mouse.coord.x), \(mouse.coord.y)")
+                 
+                      
+                        Spacer()
+                        
+                        
+                        //  Text("Coordonnées : \(mouse.coord.x), \(mouse.coord.y)")
+                    }
                 }
                 
-                Image(nsImage: image)
-                    .padding()
+                if let image = image {
+                    Image(nsImage: image)
+                        .padding()
+                }else{
+                    Rectangle()
+                        .frame(width: 100, height: 100)
+                        .padding()
+                }
                 
-         
                 
             }
-        
             
+          
+        }
+            HStack{
+                Spacer()
+                Slider(value: $sliderValue, in: minimumValue...maximumvalue)
+                Spacer()
+                Button {
+                    //Actions
+                } label: {
+                    Text("Calibrer")
+                }
+                
+            }.padding()
+        
         }
         .border(Color.green)
         .frame(width: 400, height: 200, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
@@ -60,6 +106,7 @@ struct ContentView: View {
             let cursor = NSCursor.crosshair
             cursor.set()
         })
+        
         
         
     }
@@ -73,8 +120,9 @@ struct ContentView: View {
     }
     
     
-    func getImageAroundMouse() -> NSImage? {
+    func getImageAroundMouse() -> (NSImage?, NSColor?){
         var imageReturned : NSImage?
+        var colorReturned : NSColor?
         if let screen = getScreenWithMouse(){
             let deviceDescription = screen.deviceDescription
             let screenID = deviceDescription[NSDeviceDescriptionKey(rawValue: "NSScreenNumber")]
@@ -85,7 +133,7 @@ struct ContentView: View {
             print("Rectangle center : \(origin)")
             origin.x -= CGFloat(size/2)
             origin.y -= CGFloat(size/2)
-      
+            
             print("Mouse : \(mouse.coord)")
             print("Min max \(screen.frame.maxY)")
             
@@ -93,17 +141,35 @@ struct ContentView: View {
             {
                 imageReturned = NSImage(cgImage: image, size: CGSize(width: 100, height: 100))
                 
+                colorReturned = imageReturned!.averageColor!
+                colorReturned!.usingColorSpace(.sRGB)
                 
-                let color = imageReturned!.averageColor!
+                if(calibration.isCalibrating){
+                    calibration.lastAverageColor = colorReturned!
+                }
                 
+                if(calibration.isCalibrated){
+                    let red = colorReturned!.redComponent, green = colorReturned!.greenComponent, blue = colorReturned!.blueComponent
+                    
+                    let deltaR = calibration.baseColorForCalibration.redComponent - calibration.calibrationColor.redComponent
+                    let deltaG = calibration.baseColorForCalibration.greenComponent - calibration.calibrationColor.greenComponent
+                    let deltaB = calibration.baseColorForCalibration.blueComponent - calibration.calibrationColor.blueComponent
+                    
+                    if #available(OSX 11.0, *) {
+                        //TODO find for older versions
+                        // averageColor = NSColor(Color(.sRGB,red: Double(red + deltaR), green: Double(green + deltaG), blue: Double(blue + deltaB), opacity: 1))
+                    } else {
+                        // Fallback on earlier versions
+                    }
+                }
                 
                 // print the RGB values
-                let red = color.redComponent, green = color.greenComponent, blue = color.blueComponent
-            //    print("r:", Int(red * 255), " g:", Int(green * 255), " b:", Int(blue * 255))
+                //  let red = color.redComponent, green = color.greenComponent, blue = color.blueComponent
+                //    print("r:", Int(red * 255), " g:", Int(green * 255), " b:", Int(blue * 255))
                 
             }
         }
-        return imageReturned
+        return (imageReturned, colorReturned)
     }
     
     
