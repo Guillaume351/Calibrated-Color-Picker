@@ -17,90 +17,106 @@ struct ContentView: View {
     // Used to store calibrated RGB value
     @EnvironmentObject var calibration : Calibration
     
+    @EnvironmentObject var settings : UserSettings
+    
     //  var averageColor : NSColor = NSColor.black
     // Slider values
     @State var sliderValue = 10.0
     var minimumValue = 0.0
     var maximumvalue = 100.0
+    @State var modeSelected = ColorMode.RGB
+    
+    @State var showCalibration = false
     
     var body: some View {
         
         
         // Spacers needed to make the VStack occupy the whole screen
         return VStack {
+
+            
+            Picker("Mode", selection: $modeSelected) {
+                Text("RGB").tag(ColorMode.RGB)
+                Text("LAB").tag(ColorMode.LAB)
+            }.onReceive([modeSelected].publisher.first(), perform: { _ in
+              //  settings.colorMode = modeSelected
+                if(settings.colorMode != modeSelected){
+                    settings.colorMode = modeSelected
+                    print("Mode changed to " + modeSelected.rawValue)
+                }
+            }).padding()
             HStack{
-            if let (image, color) = getImageAroundMouse(){
-                if let color = color {
-                    Rectangle()
-                        .fill(Color(color))
-                        .frame(width: 100, height: 100)
-                        .padding()
-                    
-                    VStack {
-                        Spacer()
+                if let (image, color) = getImageAroundMouse(){
+                    if let color = color {
+                        Rectangle()
+                            .fill(Color(color))
+                            .frame(width: 100, height: 100)
+                            .padding()
                         
-                        Text("R: \(color.redComponent * 255)")
-                        Text("G: \(color.greenComponent * 255)")
-                        Text("B: \(color.blueComponent * 255)")
-                        Spacer()
-                        Text("L: \(color.rgbColor()!.toLAB().l)")
-                        Text("A: \(color.rgbColor()!.toLAB().a)")
-                        Text("B: \(color.rgbColor()!.toLAB().b)")
-                        Spacer()
+                        VStack {
+                            Spacer()
+                            if(modeSelected == ColorMode.RGB){
+                                Text("R: \(color.redComponent * 255)")
+                                Text("G: \(color.greenComponent * 255)")
+                                Text("B: \(color.blueComponent * 255)")
+                            }else{
+                                if let rgbColor = color.rgbColor() {
+                                    Text("L: \(String(format: "%.2f", rgbColor.toLAB().l))"
+                                    + "\nA: \(String(format: "%.2f", rgbColor.toLAB().a))"
+                                    + "\nB: \(String(format: "%.2f",  rgbColor.toLAB().b))"
+                                    )
+                                }
+                           
+                               
+                            }
+                            Spacer()
+                        }
                         
-                        
-                        //  Text("Coordonnées : \(mouse.coord.x), \(mouse.coord.y)")
+                    }else{
+                        Rectangle()
+                            .frame(width: 100, height: 100)
+                            .padding()
+                        VStack {
+                            Spacer()
+                            Text("Déplacez la souris pour commencer")
+                            Spacer()
+                        }
                     }
                     
-                }else{
-                    Rectangle()
-                        .frame(width: 100, height: 100)
-                        .padding()
-                    
-                    
-                    VStack {
-                        Spacer()
-                        
-                        Text("Déplacez la souris pour commencer")
-               
-                 
-                      
-                        Spacer()
-                        
-                        
-                        //  Text("Coordonnées : \(mouse.coord.x), \(mouse.coord.y)")
+                    if let image = image {
+                        Image(nsImage: image)
+                            .padding()
+                    }else{
+                        Rectangle()
+                            .frame(width: 100, height: 100)
+                            .padding()
                     }
                 }
-                
-                if let image = image {
-                    Image(nsImage: image)
-                        .padding()
-                }else{
-                    Rectangle()
-                        .frame(width: 100, height: 100)
-                        .padding()
-                }
-                
                 
             }
-            
-          
-        }
             HStack{
                 Spacer()
                 Slider(value: $sliderValue, in: minimumValue...maximumvalue)
                 Spacer()
                 Button {
                     //Actions
+                    withAnimation {
+                        showCalibration.toggle()
+                    }
+                    
                 } label: {
                     Text("Calibrer")
                 }
                 
             }.padding()
-        
+            
+            if showCalibration{
+                CalibrationView().environmentObject(calibration).environmentObject(settings).transition(.scale)
+            }
+            
         }
-        .border(Color.green)
-        .frame(width: 400, height: 200, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+       // .border(Color.green)
+        .frame(width: 400, height: showCalibration ? 450 : 250, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
         .contentShape(Rectangle()) // Make the entire VStack tappabable, otherwise, only the areay with text generates a gesture
         .onAppear(perform: {
             let cursor = NSCursor.crosshair
@@ -207,4 +223,11 @@ extension NSImage {
         
         return NSColor(red: CGFloat(bitmap[0]) / 255, green: CGFloat(bitmap[1]) / 255, blue: CGFloat(bitmap[2]) / 255, alpha: CGFloat(bitmap[3]) / 255)
     }
+}
+
+enum ColorMode: String, CaseIterable, Identifiable{
+    case RGB
+    case LAB
+    
+    var id: String {self.rawValue}
 }

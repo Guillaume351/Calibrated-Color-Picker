@@ -15,6 +15,7 @@
 		C5D5A034255C18DB0089C9B3 /* Calibrated_Color_PickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5D5A033255C18DB0089C9B3 /* Calibrated_Color_PickerTests.swift */; };
 		C5D5A03F255C18DB0089C9B3 /* Calibrated_Color_PickerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5D5A03E255C18DB0089C9B3 /* Calibrated_Color_PickerUITests.swift */; };
 		C5D5A050255C49470089C9B3 /* rgb_to_lab.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5D5A04F255C49470089C9B3 /* rgb_to_lab.swift */; };
+		C5D681A3255FD4C300F94A72 /* CalibrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5D681A2255FD4C300F94A72 /* CalibrationView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +51,8 @@
 		C5D5A03E255C18DB0089C9B3 /* Calibrated_Color_PickerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calibrated_Color_PickerUITests.swift; sourceTree = "<group>"; };
 		C5D5A040255C18DB0089C9B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C5D5A04F255C49470089C9B3 /* rgb_to_lab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = rgb_to_lab.swift; sourceTree = "<group>"; };
+		C5D681A2255FD4C300F94A72 /* CalibrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalibrationView.swift; sourceTree = "<group>"; };
+		C5D681A7255FE63700F94A72 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Main.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +103,7 @@
 		C5D5A01C255C18D90089C9B3 /* Calibrated Color Picker */ = {
 			isa = PBXGroup;
 			children = (
+				C5D681A1255FD4B300F94A72 /* Views */,
 				C5D5A01D255C18D90089C9B3 /* AppDelegate.swift */,
 				C5D5A01F255C18D90089C9B3 /* ContentView.swift */,
 				C5D5A021255C18DA0089C9B3 /* Assets.xcassets */,
@@ -136,6 +140,14 @@
 				C5D5A040255C18DB0089C9B3 /* Info.plist */,
 			);
 			path = "Calibrated Color PickerUITests";
+			sourceTree = "<group>";
+		};
+		C5D681A1255FD4B300F94A72 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C5D681A2255FD4C300F94A72 /* CalibrationView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -223,6 +235,7 @@
 			knownRegions = (
 				en,
 				Base,
+				fr,
 			);
 			mainGroup = C5D5A011255C18D90089C9B3;
 			productRefGroup = C5D5A01B255C18D90089C9B3 /* Products */;
@@ -271,6 +284,7 @@
 				C5D5A050255C49470089C9B3 /* rgb_to_lab.swift in Sources */,
 				C5D5A020255C18D90089C9B3 /* ContentView.swift in Sources */,
 				C5D5A01E255C18D90089C9B3 /* AppDelegate.swift in Sources */,
+				C5D681A3255FD4C300F94A72 /* CalibrationView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -310,6 +324,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				C5D5A027255C18DA0089C9B3 /* Base */,
+				C5D681A7255FE63700F94A72 /* fr */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -321,6 +336,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -382,6 +398,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

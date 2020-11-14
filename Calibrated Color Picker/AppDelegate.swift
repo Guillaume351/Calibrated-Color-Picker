@@ -21,7 +21,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Create the SwiftUI view that provides the window contents.
         let calibration = Calibration()
-        let contentView = ContentView().environmentObject(mouse).environmentObject(calibration)
+        let settings = UserSettings()
+        let contentView = ContentView().environmentObject(mouse).environmentObject(calibration).environmentObject(settings)
 
         // Create the window and set the content view.
         window = NSWindow(
@@ -79,5 +80,9 @@ class Calibration: ObservableObject {
     @Published var lastAverageColor : NSColor = NSColor.black
     @Published var isCalibrated : Bool = false
     @Published var isCalibrating : Bool = false
+}
+
+class UserSettings : ObservableObject {
+    @Published var colorMode : ColorMode = ColorMode.RGB
 }
 
