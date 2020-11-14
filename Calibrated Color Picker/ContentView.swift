@@ -48,6 +48,9 @@ struct ContentView: View {
             HStack{
                 if let (image, color) = getImageAroundMouse(){
                     if let color = color {
+                        
+                        
+                        
                         Rectangle()
                             .fill(Color(color))
                             .frame(width: 100, height: 100)
@@ -70,7 +73,7 @@ struct ContentView: View {
                                
                             }
                             Spacer()
-                        }
+                        }.frame(width: 100, height: 100)
                         
                     }else{
                         Rectangle()
@@ -85,7 +88,9 @@ struct ContentView: View {
                     
                     if let image = image {
                         Image(nsImage: image)
+                            .frame(width: 100, height: 100)
                             .padding()
+                            
                     }else{
                         Rectangle()
                             .frame(width: 100, height: 100)
