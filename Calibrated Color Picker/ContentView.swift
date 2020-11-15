@@ -73,7 +73,7 @@ struct ContentView: View {
                                
                             }
                             Spacer()
-                        }.frame(width: 100, height: 100)
+                        }.frame(width: 100, height: 100)    
                         
                     }else{
                         Rectangle()
@@ -121,7 +121,7 @@ struct ContentView: View {
             
         }
        // .border(Color.green)
-        .frame(width: 400, height: showCalibration ? 450 : 250, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+        .frame(width: 400, height: showCalibration ? 500 : 250, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
         .contentShape(Rectangle()) // Make the entire VStack tappabable, otherwise, only the areay with text generates a gesture
         .onAppear(perform: {
             let cursor = NSCursor.crosshair
@@ -151,12 +151,12 @@ struct ContentView: View {
             let size = sliderValue
             var origin = mouse.coord
             origin.y = screen.frame.height - origin.y
-            print("Rectangle center : \(origin)")
+           // print("Rectangle center : \(origin)")
             origin.x -= CGFloat(size/2)
             origin.y -= CGFloat(size/2)
             
-            print("Mouse : \(mouse.coord)")
-            print("Min max \(screen.frame.maxY)")
+          //  print("Mouse : \(mouse.coord)")
+         //   print("Min max \(screen.frame.maxY)")
             
             if let image:CGImage = CGDisplayCreateImage(CGMainDisplayID(), rect: CGRect(origin: origin, size: CGSize(width: size, height: size)))
             {
@@ -166,7 +166,10 @@ struct ContentView: View {
                 colorReturned!.usingColorSpace(.sRGB)
                 
                 if(calibration.isCalibrating){
+                    
+                    print("setting average color")
                     calibration.lastAverageColor = colorReturned!
+                    print("last average color set!")
                 }
                 
                 if(calibration.isCalibrated){
