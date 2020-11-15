@@ -112,6 +112,7 @@ struct ContentView: View {
                 } label: {
                     Text("Calibrer")
                 }
+                Text(calibration.isCalibrated ? "Calibré" : "Non calibré")
                 
             }.padding()
             
@@ -121,7 +122,7 @@ struct ContentView: View {
             
         }
        // .border(Color.green)
-        .frame(width: 400, height: showCalibration ? 500 : 250, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+        .frame(width: 400, height: showCalibration ? 400 : 250, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
         .contentShape(Rectangle()) // Make the entire VStack tappabable, otherwise, only the areay with text generates a gesture
         .onAppear(perform: {
             let cursor = NSCursor.crosshair
@@ -179,6 +180,10 @@ struct ContentView: View {
                     let deltaG = calibration.baseColorForCalibration.greenComponent - calibration.calibrationColor.greenComponent
                     let deltaB = calibration.baseColorForCalibration.blueComponent - calibration.calibrationColor.blueComponent
                     
+                    let colorWithDelta = NSColor(red: colorReturned!.redComponent + deltaR, green: colorReturned!.greenComponent + deltaG, blue: colorReturned!.blueComponent + deltaB, alpha: CGFloat(1))
+                    colorReturned = colorWithDelta
+                    
+                 //   colorReturned?.blended(withFraction: 0.5, of: <#T##NSColor#>)
                     if #available(OSX 11.0, *) {
                         //TODO find for older versions
                         // averageColor = NSColor(Color(.sRGB,red: Double(red + deltaR), green: Double(green + deltaG), blue: Double(blue + deltaB), opacity: 1))
